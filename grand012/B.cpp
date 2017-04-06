@@ -5,11 +5,9 @@ void collect(std::vector<std::vector<int> >& graph, std::vector<int> curNodes, s
     if (curNodes.size() == 0) return;
     std::vector<int> newCurNodes;
     for (std::vector<int>::iterator i = curNodes.begin(); i != curNodes.end(); i++) {
-	if (collection[*i] == 0) {
-	    continue;
-	}
 	collection[*i] = 0;
 	for (std::vector<int>::iterator j = graph[*i].begin(); j != graph[*i].end(); j++) {
+	    if (collection[*j] == 0) continue;
 	    newCurNodes.push_back(*j);
 	}
     }
@@ -39,15 +37,16 @@ int main()
     }
     
     std::vector<int> colors(N, 0);
+    std::vector<int> collection(N, -1); // N-vector filled with -1
     for (int k = 0; k < Q; k++) {
-    	std::vector<int> collection(N, -1); // N-vector filled with -1
     	std::vector<int> curNodes(1, V[k]);
     	collect(G, curNodes, collection, D[k]);
     	for (int l = 0; l < N; l++) {
     	    if (collection[l] > -1) {
     		colors[l] = C[k];
     	    }
-    	}	
+    	}
+	std::fill(collection.begin(), collection.end(), -1); // reset the vector
     }
     for (int i = 0; i < N; i++) {
     	printf("%d\n", colors[i]);
